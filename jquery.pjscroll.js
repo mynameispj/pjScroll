@@ -57,12 +57,19 @@
 			this.originalMargin = parseInt($element.css("margin-top"), 10) || 0;
 			
 			var elementWidth = $element.outerWidth(true); 
+			
 			var elementSibling = $element.next(); 
+			var elementParent = $element.parent(); 
+			var elementParentPadding = parseInt(elementParent.css('padding-left'), 10); 
+			
+			var elementOffsetLeft = parseInt($element.position().left, 10); 
+			elementOffsetLeft = elementOffsetLeft - elementParentPadding;  
+
 			
 			this.getMargin = function ($window)
 			{
 								
-				var max = $element.parent().height() - $element.outerHeight();
+				var max = elementParent.height() - $element.outerHeight();
 				var margin = this.originalMargin;
 				
 				if ($window.scrollTop() < this.min) {
@@ -79,7 +86,8 @@
 					$element
 						.css('position','fixed') 
 						.css('top',opts.top +'px')
-						.css('margin-top', '0px');	
+						.css('margin-top', '0px')
+						.css('margin-left', elementOffsetLeft +'px'); 	
 						
 					elementSibling
 						.css('margin-left',elementWidth+'px'); 	
@@ -105,7 +113,6 @@
 						}		
 					}										
 				}
-					
 			}
 		}	   
     };
