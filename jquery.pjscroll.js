@@ -1,12 +1,15 @@
 // ####################################################################################
 // #######                                                                      #######
-// ####### Plugin:      jScroll                                                 #######
-// ####### Author:      William Duffy, edited by PJ McCormick                                           #######
+// ####### Plugin:      pjScroll   												#######
+// ####### Author: 		PJ McCormick											#######
+// ####### Website:		http://www.pjmccormick.com/pjscroll						#######
+// ####### Version:     1.0	                                                    #######
+// #######																		#######
+// ####### Based on: 	jScroll													#######
+// ####### Author:      William Duffy                                           #######
 // ####### Website:     http://www.wduffy.co.uk/jScroll                         #######
-// ####### Website: 	http://www.pjmccormick.com
-// ####### Version:     1.1	                                                    #######
 // #######                                                                      #######
-// ####### Copyright (c) 2011, William Duffy - www.wduffy.co.uk                 #######
+// ####### Copyright (c) 2012, PJ McCormick - www.pjmccormick.com               #######
 // #######                                                                      #######
 // ####### Permission is hereby granted, free of charge, to any person          #######
 // ####### obtaining a copy of this software and associated documentation       #######
@@ -30,13 +33,14 @@
 // ####### OTHER DEALINGS IN THE SOFTWARE.                                      #######
 // #######                                                                      #######
 // ####################################################################################
+
 (function($) {
     
-    // Public: jScroll Plugin
-    $.fn.jScroll = function(options) {
+    // Public: pjScroll Plugin
+    $.fn.pjScroll = function(options) {
 
-        var opts = $.extend({}, $.fn.jScroll.defaults, options);
-
+        var opts = $.extend({}, $.fn.pjScroll.defaults, options);
+        console.log(opts); 
         return this.each(function() {
 			var $element = $(this);
 			var $window = $(window);
@@ -44,8 +48,6 @@
 			
 			$window.scroll(function() {
 				locator.getMargin($window);
-				$element
-					.stop()
 			});
         });
 		
@@ -55,41 +57,64 @@
 			this.min = $element.offset().top;
 			this.originalMargin = parseInt($element.css("margin-top"), 10) || 0;
 			
+			var elementWidth = $element.outerWidth(true); 
+			var elementSibling = $element.next(); 
+			
 			this.getMargin = function ($window)
 			{
+								
 				var max = $element.parent().height() - $element.outerHeight();
 				var margin = this.originalMargin;
-			
+				
 				if ($window.scrollTop() < this.min) {
 					$element
-						.removeClass('sticky'); 
-				}
+						.removeAttr('style'); 
+					
+					elementSibling
+						.removeAttr('style'); 	
+				}		
 			
 				if ($window.scrollTop() >= this.min) {
-				
 					margin = margin + opts.top + $window.scrollTop() - this.min; 
-					//console.log('fire'); 
+					
 					$element
-						.addClass('sticky')
-						.removeAttr("style");
-				}
+						.css('position','fixed') 
+						.css('top',opts.top +'px')
+						.css('margin-top', '0px');	
+						
+					elementSibling
+						.css('margin-left',elementWidth+'px'); 	
+				}	
+			
+			
 				if (margin > max) {
 					margin = max;
-					$element
-						.removeClass('sticky')
-						.css("margin-top", margin + 'px'); 
-				}
-			
-				return ({"marginTop" : margin + 'px'});
+					
+					if (opts.stay == true) {
+						$element
+							.css('position','relative')
+							.css('top','0px')
+							.css('margin-top',margin + 'px');	
+							
+						elementSibling
+							.removeAttr('style'); 													
+					} else {
+						$element
+							.removeAttr('style'); 
+						elementSibling
+							.removeAttr('style'); 	
+					}		
+				}	
+					
+				//return ({"marginTop" : margin + 'px'});
 			}
 		}	   
-		
     };
 
     // Public: Default values
-    $.fn.jScroll.defaults = {
-        speed	:	"slow",
-		top		:	10
+    $.fn.pjScroll.defaults = {
+		top		:	0, 
+		stay	:	false
     };
 
 })(jQuery);
