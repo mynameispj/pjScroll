@@ -1,8 +1,9 @@
 // ####################################################################################
 // #######                                                                      #######
 // ####### Plugin:      jScroll                                                 #######
-// ####### Author:      William Duffy                                           #######
+// ####### Author:      William Duffy, edited by PJ McCormick                                           #######
 // ####### Website:     http://www.wduffy.co.uk/jScroll                         #######
+// ####### Website: 	http://www.pjmccormick.com
 // ####### Version:     1.1	                                                    #######
 // #######                                                                      #######
 // ####### Copyright (c) 2011, William Duffy - www.wduffy.co.uk                 #######
@@ -42,9 +43,9 @@
 			var locator = new location($element);
 			
 			$window.scroll(function() {
+				locator.getMargin($window);
 				$element
 					.stop()
-					.animate(locator.getMargin($window), opts.speed);
 			});
         });
 		
@@ -59,11 +60,25 @@
 				var max = $element.parent().height() - $element.outerHeight();
 				var margin = this.originalMargin;
 			
-				if ($window.scrollTop() >= this.min)
-					margin = margin + opts.top + $window.scrollTop() - this.min; 
+				if ($window.scrollTop() < this.min) {
+					$element
+						.removeClass('sticky'); 
+				}
+			
+				if ($window.scrollTop() >= this.min) {
 				
-				if (margin > max)
+					margin = margin + opts.top + $window.scrollTop() - this.min; 
+					//console.log('fire'); 
+					$element
+						.addClass('sticky')
+						.removeAttr("style");
+				}
+				if (margin > max) {
 					margin = max;
+					$element
+						.removeClass('sticky')
+						.css("margin-top", margin + 'px'); 
+				}
 			
 				return ({"marginTop" : margin + 'px'});
 			}
