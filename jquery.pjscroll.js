@@ -40,7 +40,6 @@
     $.fn.pjScroll = function(options) {
 
         var opts = $.extend({}, $.fn.pjScroll.defaults, options);
-        console.log(opts); 
         return this.each(function() {
 			var $element = $(this);
 			var $window = $(window);
@@ -86,27 +85,27 @@
 						.css('margin-left',elementWidth+'px'); 	
 				}	
 			
-			
-				if (margin > max) {
-					margin = max;
+				if (opts.forever == false) {
+					if (margin > max) {
+						margin = max;
+						
+						if (opts.stay == true) {
+							$element
+								.css('position','relative')
+								.css('top','0px')
+								.css('margin-top',margin + 'px');	
+								
+							elementSibling
+								.removeAttr('style'); 													
+						} else {
+							$element
+								.removeAttr('style'); 
+							elementSibling
+								.removeAttr('style'); 	
+						}		
+					}										
+				}
 					
-					if (opts.stay == true) {
-						$element
-							.css('position','relative')
-							.css('top','0px')
-							.css('margin-top',margin + 'px');	
-							
-						elementSibling
-							.removeAttr('style'); 													
-					} else {
-						$element
-							.removeAttr('style'); 
-						elementSibling
-							.removeAttr('style'); 	
-					}		
-				}	
-					
-				//return ({"marginTop" : margin + 'px'});
 			}
 		}	   
     };
@@ -114,7 +113,8 @@
     // Public: Default values
     $.fn.pjScroll.defaults = {
 		top		:	0, 
-		stay	:	false
+		stay	:	false,
+		forever	: 	false
     };
 
 })(jQuery);
