@@ -83,6 +83,8 @@
 					$element
 						.removeClass(opts.class)
 						.removeAttr('style'); 
+
+					if ($element.hasClass('stuck')) $element.removeClass('stuck'); 
 					
 					elementSiblings
 						.removeClass(opts.class+'sibling'); 	
@@ -96,7 +98,8 @@
 						.css('position','fixed') 
 						.css('top',opts.top +'px')
 						.css('margin-top', '0px'); 
-						//.css('margin-left', elementOffsetLeft +'px'); 	
+
+					if ($element.hasClass('stuck')) $element.removeClass('stuck'); 
 
 					elementSiblings
 						.addClass(opts.class+'sibling'); 	
@@ -107,16 +110,11 @@
 						if (margin > max) {
 							margin = max;//- $element.outerHeight();
 							
-							//marginTop = 
-							
-							
 							if (opts.stay == true) {
-								//$element
-								//	.removeAttr('style');
-							
+
 								$element
+									.addClass('stuck')								
 									.css('position','relative')
-									//.css('top','0px');
 									.css('margin-top',margin + 'px');	
 									
 								elementSiblings
