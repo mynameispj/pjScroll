@@ -45,7 +45,7 @@
 			var $window = $(window);
 			var locator = new location($element);
 			
-			$window.scroll(function() {
+			$window.on('scroll', function() {
 				locator.getMargin($window);
 			});
         });
@@ -58,8 +58,15 @@
 			
 			var elementWidth = $element.outerWidth(true); 
 			
-			var elementSibling = $element.next(); 
-			var elementParent = $element.parent(); 
+			var elementSiblings = $element.siblings();
+			
+			
+			if (opts.container != 'default') {
+				var elementParent = $(opts.container); 
+			} else {
+				var elementParent = $element.parent(); 
+			}
+			 
 			var elementParentPadding = parseInt(elementParent.css('padding-left'), 10); 
 			
 			var elementOffsetLeft = parseInt($element.position().left, 10); 
@@ -74,54 +81,73 @@
 				
 				if ($window.scrollTop() < this.min) {
 					$element
+						.removeClass(opts.class)
 						.removeAttr('style'); 
 					
-					elementSibling
-						.removeAttr('style'); 	
+					elementSiblings
+						.removeClass(opts.class+'sibling'); 	
 				}		
 			
 				if ($window.scrollTop() >= this.min) {
 					margin = margin + opts.top + $window.scrollTop() - this.min; 
 					
 					$element
+						.addClass(opts.class)
 						.css('position','fixed') 
 						.css('top',opts.top +'px')
-						.css('margin-top', '0px')
-						.css('margin-left', elementOffsetLeft +'px'); 	
+						.css('margin-top', '0px'); 
+						//.css('margin-left', elementOffsetLeft +'px'); 	
+
+					elementSiblings
+						.addClass(opts.class+'sibling'); 	
 						
-					elementSibling
-						.css('margin-left',elementWidth+'px'); 	
+						
+					if (opts.forever == false) {
+					
+						if (margin > max) {
+							margin = max;//- $element.outerHeight();
+							
+							//marginTop = 
+							
+							
+							if (opts.stay == true) {
+								//$element
+								//	.removeAttr('style');
+							
+								$element
+									.css('position','relative')
+									//.css('top','0px');
+									.css('margin-top',margin + 'px');	
+									
+								elementSiblings
+									.removeClass(opts.class+'sibling'); 	
+							
+							} else {
+								$element
+									.removeClass(opts.class)	
+									.removeAttr('style'); 
+								
+								elementSiblings
+									.removeClass(opts.class+'sibling'); 	
+							}		
+						}										
+					}
+						
+						
+
 				}	
 			
-				if (opts.forever == false) {
-					if (margin > max) {
-						margin = max;
-						
-						if (opts.stay == true) {
-							$element
-								.css('position','relative')
-								.css('top','0px')
-								.css('margin-top',margin + 'px');	
-								
-							elementSibling
-								.removeAttr('style'); 													
-						} else {
-							$element
-								.removeAttr('style'); 
-							elementSibling
-								.removeAttr('style'); 	
-						}		
-					}										
-				}
 			}
 		}	   
     };
 
     // Public: Default values
     $.fn.pjScroll.defaults = {
-		top		:	0, 
-		stay	:	false,
-		forever	: 	false
+		top			:	0, 
+		stay		:	false,
+		forever		: 	false, 
+		class 		:	'sticky', 
+		container	:	'default'
     };
 
 })(jQuery);
