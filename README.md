@@ -19,8 +19,8 @@ $('.sticky-element').pjScroll({
 Options
 =======
 
-top			:	0, 
-stay		:	false,
-forever		: 	false, 
-stickyClass :	'sticky', 
-container	:	'default'
+* -top- : sticky element offset, defaults to 0	
+* -stay- : defaults to false. Setting to true will make the element stick to the bottom of its parent container when you scroll. 
+* -forever- : defaults to false. Setting to true will make the element follow you throughout the entire page, instead of just being contained to the parent element. 
+* -stickyClass- : CSS class applied to sticky elements. Defaults to	'sticky'
+* -container-	: HTML parent of sticky element
