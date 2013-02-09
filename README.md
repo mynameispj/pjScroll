@@ -8,13 +8,13 @@ I apologize for the shit-ass documentation at this point. If you'd like to use t
 
 Usage
 ======
-
+```javascript
 $('.sticky-element').pjScroll({
     top: 10,
     stay: true,
     container: '#sticky-container'
 });
-
+```
 
 Options
 =======
